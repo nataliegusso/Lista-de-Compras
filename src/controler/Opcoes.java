@@ -1,4 +1,4 @@
-package services;
+package controler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import entities.ListaDeCompras;
 import entities.Products;
+import utilities.MyComparator;
 
 public class Opcoes {
 	Scanner sc = new Scanner(System.in);
@@ -19,6 +20,7 @@ public class Opcoes {
 	Products product = new Products();
 
 	double soma = 0;
+	
 	
 	public void inserir(List<Products> list) throws ParseException {
 		Locale.setDefault(Locale.US);
@@ -34,7 +36,6 @@ public class Opcoes {
 					return;
 				}
 			}
-			
 			System.out.print("Unidade de medida (unid, kg): ");
 			String unid = sc.nextLine().toLowerCase();
 			System.out.print("Preço: ");
@@ -44,7 +45,6 @@ public class Opcoes {
 	
 			list.add(new Products(nome, unid, preco, preco, preco, data));
 			list.sort(new MyComparator());  // Ordena na classe MyComparator
-
 			dados.exportar(list);
 
 			System.out.print("Gostaria de inserir mais algum produto (y/n)? ");
@@ -82,7 +82,6 @@ public class Opcoes {
 				prod.setName(nome);
 				prod.setDateCur(data);
 				prod.setPriceCur(precoUltimo);
-				
 				if (precoUltimo > prod.getPriceMax()){
 					prod.setPriceMax(precoUltimo);
 				}else if (precoUltimo < prod.getPriceMin()){
@@ -123,7 +122,6 @@ public class Opcoes {
 					}
 				}
 			}
-			
 			System.out.print("Quantidade: ");
 			Double qtde = sc.nextDouble();
 			String unid = null;
@@ -134,7 +132,6 @@ public class Opcoes {
 					unid = prod.getUnit();
 				} 
 			}
-			
 			lista.add(new ListaDeCompras(nome, qtde, unid));
 			
 			System.out.print("Gostaria de inserir mais algum produto (y/n)? ");

@@ -1,4 +1,4 @@
-package services;
+package controler;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import entities.Products;
+import utilities.MyComparator;
 
 public class Dados {
 	Scanner sc = new Scanner(System.in);
@@ -21,9 +22,10 @@ public class Dados {
 	Products product = new Products();
 	List<Products>lines = new ArrayList<>();
 
+	
 	public void exportar(List<Products> list) {
 		try (PrintWriter bw = new PrintWriter(new FileWriter("c:\\temp\\lista.txt"))) { 
-			list.sort(new MyComparator());  //ordena
+			list.sort(new MyComparator()); 
 			
 			for (int i=0; i<list.size() ; i++) {
 				bw.printf("%s%n", list.get(i));
@@ -33,8 +35,9 @@ public class Dados {
 		}
 	}
 	
+	
 	public void importar(List<Products> list) throws ParseException {
-		list.sort(new MyComparator());  //ordena
+		list.sort(new MyComparator());
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("c:\\temp\\lista.txt"))) { 
 			String itens = br.readLine(); 

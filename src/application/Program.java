@@ -6,21 +6,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import controler.Dados;
+import controler.Opcoes;
 import entities.ListaDeCompras;
 import entities.Products;
-import services.Dados;
-import services.Opcoes;
 
 public class Program {
 	
 	public static void main(String[] args) throws ParseException {
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
 		List<Products> list = new ArrayList<>();
 		List<ListaDeCompras> lista = new ArrayList<>();
-		//Products product = new Products();
+
 		Opcoes opcoes = new Opcoes();
 		Dados dados = new Dados();
 		

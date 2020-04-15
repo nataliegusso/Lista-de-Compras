@@ -32,8 +32,9 @@ public class Program {
 			System.out.println("LISTA DE COMPRAS");
 			System.out.println("1 - Inserir novos produtos; ");
 			System.out.println("2 - Atualizar produtos; ");
-			System.out.println("3 - Mostrar lista de produtos");
+			System.out.println("3 - Mostrar lista de produtos;");
 			System.out.println("4 - Montar a lista de compras;");
+			System.out.println("5 - Zerar a lista de compras.");
 			System.out.print("Opção: ");
 			int num = sc.nextInt();
 			sc.nextLine();
@@ -43,6 +44,7 @@ public class Program {
 				case 2: opcoes.atualizar(list); break;
 				case 3: opcoes.mostrarLista(list); break;
 				case 4: opcoes.montarLista(lista, list); break;
+				case 5: opcoes.zerarLista(lista); break;
 			}
 
 			System.out.println();

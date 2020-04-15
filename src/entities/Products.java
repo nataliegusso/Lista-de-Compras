@@ -75,6 +75,6 @@ public class Products {
 	}
 
 	public String toString() {
-		return getName() + ", " + getUnit() + String.format(", %.2f", priceMin) + String.format(", %.2f", priceMax) + String.format(", %.2f, ", priceCur) + sdf.format(dateCur);
+		return getName() + "," + getUnit() + String.format(", %.2f", priceMin) + String.format(", %.2f", priceMax) + String.format(", %.2f, ", priceCur) + sdf.format(dateCur);
 	}
 }

@@ -18,14 +18,15 @@ public class Opcoes {
 	Dados dados = new Dados();
 	Products product = new Products();
 
+	double soma = 0;
+	
 	public void inserir(List<Products> list) throws ParseException {
 		Locale.setDefault(Locale.US);
 		char answer = 'n';
 		do {
 			System.out.println("");
 			System.out.print("Produto: ");
-			String nome = sc.nextLine();
-			nome = nome.substring(0,1).toUpperCase() + nome.substring(1);
+			String nome = sc.nextLine().toLowerCase();
 			
 			for (Products p : list) { //Testar existência
 				if (p.getName().equals(nome)) {
@@ -58,8 +59,7 @@ public class Opcoes {
 
 		System.out.println("");
 		System.out.print("Produto: ");
-		String nome = sc.nextLine();
-		nome = nome.substring(0,1).toUpperCase() + nome.substring(1);
+		String nome = sc.nextLine().toLowerCase();
 
 		int cont = 0;
 		for (Products p : list) {		//testar não existência
@@ -99,19 +99,31 @@ public class Opcoes {
 		System.out.println();
 		System.out.println("LISTA DE PRODUTOS:");
 		for (Products p : list) {
-			System.out.printf(p.getName() + String.format(", R$%.2f", p.getPriceCur()) +"/"+ p.getUnit() + " (" + sdf.format(p.getDateCur()) + ")" + String.format(",   menor R$%.2f", p.getPriceMin()) + String.format(", maior R$%.2f\n", p.getPriceMax()));
+			System.out.print(p.getName().substring(0,1).toUpperCase() + p.getName().substring(1));		
+			System.out.printf(String.format(", R$%.2f", p.getPriceCur()) +"/"+ p.getUnit() + " (" + sdf.format(p.getDateCur()) + ")" + String.format(",   menor R$%.2f", p.getPriceMin()) + String.format(", maior R$%.2f\n", p.getPriceMax()));
 		}	
 	}	
-
+	
 	
 	public void montarLista(List<ListaDeCompras> lista, List<Products> list) throws ParseException {
 		char answer = 'n';
-		double soma = 0;
 		do {
 			System.out.println("");
 			System.out.print("Produto: ");
 			String nome = sc.nextLine();
-			nome = nome.substring(0,1).toUpperCase() + nome.substring(1);
+			nome = nome.toLowerCase();
+
+			int cont = 0;
+			for (Products p : list) {		//testar não existência
+				if (!p.getName().equals(nome)) {
+					cont++;
+					if (cont == list.size()) {
+						System.out.println("Esse produto nunca foi registrado.");
+					return;
+					}
+				}
+			}
+			
 			System.out.print("Quantidade: ");
 			Double qtde = sc.nextDouble();
 			String unid = null;
@@ -122,6 +134,7 @@ public class Opcoes {
 					unid = prod.getUnit();
 				} 
 			}
+			
 			lista.add(new ListaDeCompras(nome, qtde, unid));
 			
 			System.out.print("Gostaria de inserir mais algum produto (y/n)? ");
@@ -134,10 +147,15 @@ public class Opcoes {
 		System.out.println();
 		System.out.println("LISTA DE COMPRAS:");
 		for (ListaDeCompras ldc : lista) {
-			System.out.printf(ldc.getQtde() + ldc.getUnit() + " " + ldc.getName() + String.format("\n"));
+			System.out.printf(ldc.getQtde() + " " + ldc.getUnit() + " ");
+			System.out.printf(ldc.getName().substring(0,1).toUpperCase() + ldc.getName().substring(1) + String.format("\n"));
 		}
-		
 		System.out.println("Preço total estimado da compra: R$" + String.format("%.2f", soma) + ".");
+	}
+	
+	
+	public void zerarLista(List<ListaDeCompras> lista) throws ParseException {
 		lista.clear();
+		soma = 0.00;
 	}
 }

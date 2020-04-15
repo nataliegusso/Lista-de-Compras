@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 import entities.Products;
@@ -42,11 +41,12 @@ public class Dados {
 			while (itens != null) {  
 				String[] fields = itens.split(",");
 				String nome = fields[0];
-		       	double precoMin = Double.parseDouble(fields[1]);
-		       	double precoMax = Double.parseDouble(fields[2]);
-		       	double preco = Double.parseDouble(fields[3]);
-		       	Date data = sdf.parse(fields[4]);
-		       	list.add(new Products(nome, precoMin, precoMax, preco, data));
+				String unit = fields[1];
+		       	double precoMin = Double.parseDouble(fields[2]);
+		       	double precoMax = Double.parseDouble(fields[3]);
+		       	double preco = Double.parseDouble(fields[4]);
+		       	Date data = sdf.parse(fields[5]);
+		       	list.add(new Products(nome, unit, precoMin, precoMax, preco, data));
 		       	itens = br.readLine();
 			}
 		} catch (IOException e) {

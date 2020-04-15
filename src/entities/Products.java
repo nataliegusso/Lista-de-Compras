@@ -6,6 +6,7 @@ import java.util.Date;
 public class Products {
 
 	private String name;
+	private String unit;
 	private Double priceMin;
 	private Double priceMax;
 	private Double priceCur;
@@ -16,8 +17,9 @@ public class Products {
 	public Products() {
 	}
 	
-	public Products(String name, Double priceMin, Double priceMax, Double priceCur, Date dateCur) {
+	public Products(String name, String unit, Double priceMin, Double priceMax, Double priceCur, Date dateCur) {
 		this.name = name;
+		this.unit = unit;
 		this.priceMin = priceMin;
 		this.priceMax = priceMax;
 		this.priceCur = priceCur;
@@ -32,6 +34,14 @@ public class Products {
 		this.name = name;
 	}
 	
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
 	public Double getPriceMin() {
 		return priceMin;
 	}
@@ -65,6 +75,6 @@ public class Products {
 	}
 
 	public String toString() {
-		return getName() + String.format(", %.2f", priceMin) + String.format(", %.2f", priceMax) + String.format(", %.2f, ", priceCur) + sdf.format(dateCur);
+		return getName() + ", " + getUnit() + String.format(", %.2f", priceMin) + String.format(", %.2f", priceMax) + String.format(", %.2f, ", priceCur) + sdf.format(dateCur);
 	}
 }

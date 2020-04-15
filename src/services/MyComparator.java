@@ -10,5 +10,4 @@ public class MyComparator implements Comparator<Products> {
 	public int compare(Products p1, Products p2) {
 		return p1.getName().toUpperCase().compareTo(p2.getName().toUpperCase());
 	}
-
 }

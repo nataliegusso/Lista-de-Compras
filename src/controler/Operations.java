@@ -2,8 +2,9 @@ package controler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -12,11 +13,11 @@ import entities.ListaDeCompras;
 import entities.Products;
 import utilities.MyComparator;
 
-public class Opcoes {
+public class Operations {
 	Scanner sc = new Scanner(System.in);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
-	Dados dados = new Dados();
+	ExpImpData dados = new ExpImpData();
 	Products product = new Products();
 
 	double soma = 0;
@@ -38,12 +39,21 @@ public class Opcoes {
 			}
 			System.out.print("Unidade de medida (unid, kg): ");
 			String unid = sc.nextLine().toLowerCase();
+			System.out.print("Quantidade: ");
+			double qtde = sc.nextDouble();
 			System.out.print("Preço: ");
 			double preco = sc.nextDouble();
 			System.out.print("Data (dd/MM/yy): ");
 			Date data = sdf.parse(sc.next()); 
-	
-			list.add(new Products(nome, unid, preco, preco, preco, data));
+			
+			Date dataHoje = new Date(System.currentTimeMillis()); 
+			SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yy"); 
+			if (data.after(dataHoje)) {
+				System.out.println("Erro: data futura.");
+				return;
+			}
+			
+			list.add(new Products(nome, qtde, unid, preco, preco, preco, data));
 			list.sort(new MyComparator());  // Ordena na classe MyComparator
 			dados.exportar(list);
 
@@ -71,15 +81,25 @@ public class Opcoes {
 				}
 			}
 		}
+		System.out.print("Quantidade total: ");
+		double qtde = sc.nextDouble();
 		System.out.print("Preço: ");
 		double precoUltimo = sc.nextDouble();
 		System.out.print("Data (dd/MM/yy): ");
 		Date data = sdf.parse(sc.next());//Proibir data passada? Ou alertar?
 		sc.nextLine();
 		
+		Date dataHoje = new Date(System.currentTimeMillis()); 
+		SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yy"); 
+		if (data.after(dataHoje)) {
+			System.out.println("Erro: data futura.");
+			return;
+		}
+		
 		for (Products prod : list) {
 			if (prod.getName().equals(nome)){
 				prod.setName(nome);
+				prod.setQty(qtde);
 				prod.setDateCur(data);
 				prod.setPriceCur(precoUltimo);
 				if (precoUltimo > prod.getPriceMax()){
@@ -96,16 +116,17 @@ public class Opcoes {
 	public void mostrarLista(List<Products> list) throws ParseException {
 		Locale.setDefault(Locale.US);
 		System.out.println();
-		System.out.println("LISTA DE PRODUTOS:");
+		System.out.println("ESTOQUE DE PRODUTOS:");
 		for (Products p : list) {
 			System.out.print(p.getName().substring(0,1).toUpperCase() + p.getName().substring(1));		
-			System.out.printf(String.format(", R$%.2f", p.getPriceCur()) +"/"+ p.getUnit() + " (" + sdf.format(p.getDateCur()) + ")" + String.format(",   menor R$%.2f", p.getPriceMin()) + String.format(", maior R$%.2f\n", p.getPriceMax()));
+			System.out.printf(", " + String.format(p.getQty() + " " + p.getUnit() + ", R$%.2f", p.getPriceCur()) +"/"+ p.getUnit() + " (" + sdf.format(p.getDateCur()) + ")" + String.format(",   menor R$%.2f", p.getPriceMin()) + String.format(", maior R$%.2f\n", p.getPriceMax()));
 		}	
 	}	
 	
 	
-	public void montarLista(List<ListaDeCompras> lista, List<Products> list) throws ParseException {
+	public void pedidoCliente(List<ListaDeCompras> lista, List<Products> list) throws ParseException {
 		char answer = 'n';
+
 		do {
 			System.out.println("");
 			System.out.print("Produto: ");
@@ -117,41 +138,55 @@ public class Opcoes {
 				if (!p.getName().equals(nome)) {
 					cont++;
 					if (cont == list.size()) {
-						System.out.println("Esse produto nunca foi registrado.");
+						System.out.println("Não existe esse produto.");
 					return;
 					}
 				}
 			}
 			System.out.print("Quantidade: ");
-			Double qtde = sc.nextDouble();
+			Double qtdePedido = sc.nextDouble();
 			String unid = null;
-						
+			
 			for (Products prod : list) {
 				if (prod.getName().equals(nome)){
-					soma += prod.getPriceCur() * qtde;
-					unid = prod.getUnit();
+					if (qtdePedido <= prod.getQty()) {
+						soma += prod.getPriceCur() * qtdePedido;
+						unid = prod.getUnit();
+						prod.setQty(prod.getQty() - qtdePedido);
+					}else if (qtdePedido > prod.getQty()) {
+						System.out.println("Quantidade máxima: " + prod.getQty() + " " + prod.getUnit() + ".");
+						System.out.print("Quantidade: ");
+						qtdePedido = sc.nextDouble();
+						sc.nextLine();
+						if (qtdePedido <= prod.getQty()) {
+							soma += prod.getPriceCur() * qtdePedido;
+							unid = prod.getUnit();
+							prod.setQty(prod.getQty() - qtdePedido);
+						}else if(qtdePedido > prod.getQty()) {
+							System.out.println("Valor inválido.");
+							return;
+						}
+					}
 				} 
 			}
-			lista.add(new ListaDeCompras(nome, qtde, unid));
+			lista.add(new ListaDeCompras(nome, qtdePedido, unid));
 			
 			System.out.print("Gostaria de inserir mais algum produto (y/n)? ");
 			answer = sc.next().charAt(0);
 			sc.nextLine();
 		}while (answer == 'y');
 		
-		Collections.sort(lista);  //Ordena através de uma implementação de comparable na classe ListaDeCompra
+		lista.sort((p1, p2) -> p1.getName().toLowerCase().compareTo(p2.getName().toLowerCase())); //Ordena com lambda
+				
+		dados.exportar(list);
 		
 		System.out.println();
-		System.out.println("LISTA DE COMPRAS:");
+		System.out.println("PEDIDO DO CLIENTE:");
 		for (ListaDeCompras ldc : lista) {
-			System.out.printf(ldc.getQtde() + " " + ldc.getUnit() + " ");
+			System.out.printf(ldc.getQty() + " " + ldc.getUnit() + " ");
 			System.out.printf(ldc.getName().substring(0,1).toUpperCase() + ldc.getName().substring(1) + String.format("\n"));
 		}
 		System.out.println("Preço total estimado da compra: R$" + String.format("%.2f", soma) + ".");
-	}
-	
-	
-	public void zerarLista(List<ListaDeCompras> lista) throws ParseException {
 		lista.clear();
 		soma = 0.00;
 	}

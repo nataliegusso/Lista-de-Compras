@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import controler.Dados;
-import controler.Opcoes;
+import controler.ExpImpData;
+import controler.Operations;
 import entities.ListaDeCompras;
 import entities.Products;
 
@@ -20,20 +20,19 @@ public class Program {
 		List<Products> list = new ArrayList<>();
 		List<ListaDeCompras> lista = new ArrayList<>();
 
-		Opcoes opcoes = new Opcoes();
-		Dados dados = new Dados();
+		Operations opcoes = new Operations();
+		ExpImpData dados = new ExpImpData();
 		
 		dados.importar(list);
 				
 		char answer = 'n';
 		do {	
 			System.out.println();
-			System.out.println("LISTA DE COMPRAS");
+			System.out.println("OPÇÕES:");
 			System.out.println("1 - Inserir novos produtos; ");
 			System.out.println("2 - Atualizar produtos; ");
-			System.out.println("3 - Mostrar lista de produtos;");
-			System.out.println("4 - Montar a lista de compras;");
-			System.out.println("5 - Zerar a lista de compras.");
+			System.out.println("3 - Mostrar estoque de produtos;");
+			System.out.println("4 - Lista de compras / pedido do cliente;");
 			System.out.print("Opção: ");
 			int num = sc.nextInt();
 			sc.nextLine();
@@ -42,8 +41,7 @@ public class Program {
 				case 1: opcoes.inserir(list); break;
 				case 2: opcoes.atualizar(list); break;
 				case 3: opcoes.mostrarLista(list); break;
-				case 4: opcoes.montarLista(lista, list); break;
-				case 5: opcoes.zerarLista(lista); break;
+				case 4: opcoes.pedidoCliente(lista, list); break;
 			}
 
 			System.out.println();

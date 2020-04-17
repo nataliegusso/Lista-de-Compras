@@ -15,7 +15,7 @@ import java.util.Scanner;
 import entities.Products;
 import utilities.MyComparator;
 
-public class Dados {
+public class ExpImpData {
 	Scanner sc = new Scanner(System.in);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 
@@ -44,12 +44,13 @@ public class Dados {
 			while (itens != null) {  
 				String[] fields = itens.split(",");
 				String nome = fields[0];
-				String unit = fields[1];
-		       	double precoMin = Double.parseDouble(fields[2]);
-		       	double precoMax = Double.parseDouble(fields[3]);
-		       	double preco = Double.parseDouble(fields[4]);
-		       	Date data = sdf.parse(fields[5]);
-		       	list.add(new Products(nome, unit, precoMin, precoMax, preco, data));
+				double qty = Double.parseDouble(fields[1]);
+		       	String unit = fields[2];
+		       	double precoMin = Double.parseDouble(fields[3]);
+		       	double precoMax = Double.parseDouble(fields[4]);
+		       	double preco = Double.parseDouble(fields[5]);
+		       	Date data = sdf.parse(fields[6]);
+		       	list.add(new Products(nome, qty, unit, precoMin, precoMax, preco, data));
 		       	itens = br.readLine();
 			}
 		} catch (IOException e) {

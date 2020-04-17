@@ -1,17 +1,17 @@
 package entities;
 
-public class ListaDeCompras implements Comparable<ListaDeCompras>{ 
+public class ListaDeCompras{ 
 
 	private String name;
-	private Double qtde;
+	private Double qty;
 	private String unit;
 	
 	public ListaDeCompras() {
 	}
 
-	public ListaDeCompras(String name, Double qtde, String unit) {
+	public ListaDeCompras(String name, Double qty, String unit) {
 		this.name = name;
-		this.qtde = qtde;
+		this.qty = qty;
 		this.unit = unit;
 	}
 
@@ -23,12 +23,12 @@ public class ListaDeCompras implements Comparable<ListaDeCompras>{
 		this.name = name;
 	}
 
-	public Double getQtde() {
-		return qtde;
+	public Double getQty() {
+		return qty;
 	}
 
-	public void setQtde(Double qtde) {
-		this.qtde = qtde;
+	public void setQty(Double qty) {
+		this.qty = qty;
 	}
 	
 	public String getUnit() {
@@ -37,10 +37,5 @@ public class ListaDeCompras implements Comparable<ListaDeCompras>{
 
 	public void setUnit(String unit) {
 		this.unit = unit;
-	}
-
-	@Override
-	public int compareTo(ListaDeCompras ldc) {
-		return name.toLowerCase().compareTo(ldc.getName().toLowerCase());
 	}
 }
